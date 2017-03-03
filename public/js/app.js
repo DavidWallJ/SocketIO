@@ -10,6 +10,7 @@ socket.on('connect', function () {
 socket.on('message', function (message) {
     console.log(`New message: ${message.text}`);
     jQuery('.messages').append(`<p>${message.text}</p>`);
+    jQuery('.messages').append(`<p>${message.timestamp}</p>`);
 });
 
 // Handles submitting of new message
