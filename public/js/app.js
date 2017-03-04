@@ -2,6 +2,8 @@
  * Created by david on 3/2/17.
  */
 var socket = io();
+var name = getQueryVar('name') || 'Anonymous';
+var room = getQueryVar('room');
 
 socket.on('connect', function () {
    console.log('Connected to socket.io on the front-end!');
@@ -9,8 +11,12 @@ socket.on('connect', function () {
 
 socket.on('message', function (message) {
     var timestampMoment = moment.utc(message.timestamp);
+    var $message = jQuery('.messagesArea');
+
     console.log(`New message: ${message.text}`);
-    jQuery('.messages').append(`<p><strong>${timestampMoment.local().format('h:mm a')}</strong>: ${message.text}</p>`);
+
+    $message.append(`<p><strong>${message.name} ${timestampMoment.local().format('h:mm a')}</strong>:`);
+    $message.append(`<p>${message.text}</p>`);
 
 });
 
@@ -24,9 +30,11 @@ $form.on('submit', function (event) {
     var $message = $form.find('input[name=message]');
 
     socket.emit('message', {
-       text: $message.val()
+        text: $message.val(),
+        name: name
     });
 
     $message.val('');
+    // this erases the value in the form input field
 
 });
