@@ -5,8 +5,16 @@ var socket = io();
 var name = getQueryVar('name') || 'Anonymous';
 var room = getQueryVar('room');
 
+// Update room h1 tag on the chat.html page
+$('.room-title').text(room);
+
 socket.on('connect', function () {
    console.log('Connected to socket.io on the front-end!');
+
+   socket.emit('joinRoom', {
+       name: name,
+       room: room
+   });
 });
 
 socket.on('message', function (message) {
